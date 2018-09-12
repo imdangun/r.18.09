@@ -27,6 +27,7 @@ top20<-words %>% arrange(desc(freq)) %>% head(20)
 top20
 
 pal<-brewer.pal(8,"Dark2")
+pal
 wordcloud(words=words$word,
           freq=words$freq,
           min.freq=2,
@@ -56,4 +57,24 @@ ggplot(data=top20, aes(x=word, y=freq))+
   geom_col()+
   coord_flip()+
   scale_x_discrete(limit=order)+
-  geom_text(aes(label=freq))
+  geom_text(aes(label=freq), hjust=-0.3)
+
+pal<-brewer.pal(8,"Dark2")
+wordcloud(words=words$word,
+          freq=words$freq,
+          min.freq=10,
+          max.words=200,
+          random.order=F,
+          rot.per=.1,
+          scale=c(6, 0.2),
+          colors=pal)
+
+pal<-brewer.pal(9,"Blues")[5:9]
+wordcloud(words=words$word,
+          freq=words$freq,
+          min.freq=10,
+          max.words=200,
+          random.order=F,
+          rot.per=.1,
+          scale=c(6,0.2),
+          colors=pal)
