@@ -1,4 +1,4 @@
-#1. plotly
+#1. plotly package
 install.packages("plotly")
 library(plotly)
 library(ggplot2)
@@ -9,7 +9,7 @@ p<-ggplot(data=diamonds, aes(x=cut, fill=clarity))+geom_bar(position="dodge")
 ggplotly(p)
 
 
-#2. dygraphs
+#2. dygraphs package
 install.packages("dygraphs")
 library(dygraphs)
 economics<-ggplot2::economics
