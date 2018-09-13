@@ -24,7 +24,7 @@ ggChoropleth(data=crime,
              map=states)
 
 
-#2. 환자수~대한민국 시도별
+#2. 인구~대한민국 시도별
 install.packages("stringi")
 install.packages("devtools")
 devtools::install_github("cardiomoon/kormaps2014") #In R CMD INSTALL
