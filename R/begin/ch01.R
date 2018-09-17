@@ -5,7 +5,6 @@ exam<-read.csv("csv_exam.csv")
 class(exam)
 
 #1. R내장함수
-#filtering
 exam[]
 exam[1,]
 exam[2,]
@@ -14,7 +13,6 @@ exam[exam$math>=80,]
 exam[exam$class==1 & exam$math>=50,]
 exam[exam$english<90 | exam$science<50,]
 
-#selection
 exam[,1]
 exam[,2]
 exam[,3]
@@ -31,23 +29,22 @@ exam[exam$math>=50, c("english","science")]
 exam$avg<-(exam$math+exam$english+exam$science)/3
 head(exam[])
 aggregate(data=exam[exam$math>=50 & exam$english>=80,], avg~class, mean)
-aggregate(data=exam[exam$math>=50 & exam$english>=80,], avg~class, sum)
 
 exam %>%
   filter(math>=50 & english>=80) %>%
   mutate(avg=(math+english+science)/3) %>%
   group_by(class) %>%
-  summarise(mean=mean(avg))
+  summarise(avg=mean(avg))
 
 #과제1:
 #'compact'과 'suv'차종의 '도시 및 고속도로 연비 평균'을 구하는 코드이다.
-#이 코드를 aggregate() 함수를 이용하는 걸로 refactoring 한다.
-mpg<-ggplot2::mpg
+#이 코드를 R 내장함수만을 이용하는 걸로 refactoring 한다.
+mpg<-as.data.frame(ggplot2::mpg)
 mpg %>%
   filter(class=="compact" | class=="suv") %>%
   mutate(avg=(cty+hwy)/2) %>%
   group_by(class) %>%
-  summarise(mean=mean(avg))
+  summarise(avg=mean(avg))
 
 
 #2. DataType
@@ -113,7 +110,6 @@ x4
 class(x4)
 
 mpg<-ggplot2::mpg
-class(mpg)
 x<-boxplot(mpg$cty)
 x
 x$stats[,1]
@@ -123,8 +119,7 @@ x$stats[,1][2]
 
 
 #과제1:
-#'compact'과 'suv'차종의 '도시 및 고속도로 연비 평균'을 구하는 코드이다.
-#이 코드를 aggregate() 함수를 이용하는 걸로 refactoring 한다.
+mpg<-as.data.frame(ggplot2::mpg)
 mpg$avg<-(mpg$cty+mpg$hwy)/2
 aggregate(data=mpg[mpg$class=="compact" | mpg$class=="suv",], avg~class, mean)
 
