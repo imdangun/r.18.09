@@ -46,6 +46,7 @@ install.packages("ggplot2")
 library(ggplot2)
 x<-c("a","a","b","c"); x
 qplot(x)
+str(mpg)
 qplot(data=mpg, x=hwy)
 qplot(data=mpg, x=cty)
 qplot(data=mpg, x=drv, y=hwy)
