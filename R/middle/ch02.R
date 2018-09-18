@@ -39,7 +39,9 @@ pie(school, main="학력별 비중")
 height<-c(164,166,168,170,172,174,176)
 max(height)
 min(height)
+range(height)
 stem(height)
+table(height)
 height.mean<-mean(height); height.mean
 height.dev<-height-height.mean; height.dev #deviation(편차)
 sum(height.dev)
@@ -49,6 +51,14 @@ sqrt(variance) #standard deviation(표준편차)
 var(height) #variance
 sd(height)  #standard deviation
 
+
 qs<-quantile(height); qs
 qs[4]-qs[2]
 IQR(qs) # inter quartile range (사분위수 범위:1분위수~3분위수)
+
+quartile<-quantile(cars$dist); quartile
+lower.limit<-quartile[2]-1.5*IQR(cars$dist); lower.limit
+upper.limit<-quartile[4]+1.5*IQR(cars$dist); upper.limit
+cars$dist[cars$dist<lower.limit]
+cars$dist[cars$dist>upper.limit]
+boxplot(cars$dist)
