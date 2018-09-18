@@ -11,7 +11,7 @@ str(exam)
 summary(exam)
 
 library(ggplot2)
-mpg<-as.data.frame(ggplot2::mpg)
+mpg<-ggplot2::mpg
 head(mpg)
 tail(mpg)
 dim(mpg)
