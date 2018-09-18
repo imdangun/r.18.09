@@ -35,6 +35,7 @@ nums2<-rename(nums2, v2=var2); nums2
 
 #3. Derived Variable
 nums<-data.frame(var1=c(4,3,8), var2=c(2,6,1)); nums
+nums$sum
 nums$sum<-nums$var1+nums$var2; nums
 nums$mean<-(nums$var1+nums$var2)/2; nums
 
