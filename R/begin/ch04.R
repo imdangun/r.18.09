@@ -39,15 +39,15 @@ nums$sum
 nums$sum<-nums$var1+nums$var2; nums
 nums$mean<-(nums$var1+nums$var2)/2; nums
 
-mpg<-as.data.frame(ggplot2::mpg)
-mpg$gasMileage<-(mpg$cty+mpg$hwy)/2
-head(mpg)
-mean(mpg$gasMileage)
+mpg<-ggplot2::mpg
+mpg$mean<-(mpg$cty+mpg$hwy)/2
+str(mpg)
+mean(mpg$mean)
 
-summary(mpg$gasMileage)
-hist(mpg$gasMileage)
-mpg$test<-ifelse(mpg$gasMileage>=20, "pass", "fail")
-head(mpg, 20)
+summary(mpg$mean)
+hist(mpg$mean)
+mpg$test<-ifelse(mpg$mean>=20, "pass", "fail")
+head(mpg$test, 20)
 table(mpg$test)
 library(ggplot2)
 qplot(mpg$test)
