@@ -56,6 +56,7 @@ qplot(data=mpg, x=drv, y=hwy, geom="boxplot", colour=drv)
 ?qplot
 ----------
   
+  
 #과제1:
 #1) 10,20,30,40,50 다섯개 점수를 담은 변수를 만들고, 출력한다.
 score=c(10,20,30,40,50); scores
