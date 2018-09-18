@@ -23,7 +23,7 @@ midterm
 #2. 외부 데이터 이용하기
 library(readxl)
 exam<-read_excel("excel_exam.xlsx", sheet=1)
-exam
+str(exam)
 mean(exam$english)
 mean(exam$science)
 
