@@ -1,5 +1,4 @@
 load(file="welfare.rda")
-head(welfare)
 
 #1. 월급~성별
 class(welfare$gender)
@@ -16,32 +15,30 @@ qplot(welfare$income)+xlim(0,1000)
 welfare$income<-ifelse(welfare$income %in% c(0,9999), NA, welfare$income)
 table(is.na(welfare$income))
 
-genIncome<-welfare %>% 
+income.gender<-welfare %>% 
   filter(!is.na(income)) %>% 
   group_by(gender) %>% 
-  summarise(meanIncome=mean(income))
-genIncome
+  summarise(meanIncome=mean(income)); income.gender
 
-ggplot(data=genIncome, aes(x=gender, y=meanIncome))+geom_col()
+ggplot(data=income.gender, aes(x=gender, y=meanIncome))+geom_col()
 
 
 #2. 월급~나이
 class(welfare$birth)
 summary(welfare$birth)
 qplot(welfare$birth)
-table(is.na(welfare$birth))
 
+table(is.na(welfare$birth))
 welfare$age<-2015-welfare$birth+1 # 2015년 자료이다.
 summary(welfare$age)
 qplot(welfare$age)
 
-ageIncome<-welfare %>% 
+income.age<-welfare %>% 
   filter(!is.na(income)) %>% 
   group_by(age) %>% 
-  summarise(meanIncome=mean(income))
-head(ageIncome)
+  summarise(meanIncome=mean(income)); head(income.age)
 
-ggplot(data=ageIncome, aes(x=age, y=meanIncome))+geom_line()
+ggplot(data=income.age, aes(x=age, y=meanIncome))+geom_line()
 
 
 #3. 월급~세대
@@ -50,36 +47,36 @@ welfare<-welfare %>%
 table(welfare$generation)
 qplot(welfare$generation)
 
-genIncome<-welfare %>% 
+income.generation<-welfare %>% 
   filter(!is.na(income)) %>% 
   group_by(generation) %>% 
   summarise(meanIncome=mean(income))
 
-ggplot(data=genIncome, aes(x=generation, y=meanIncome))+
+ggplot(data=income.generation, aes(x=generation, y=meanIncome))+
   geom_col()+scale_x_discrete(limits=c("young","middle","old"))
-
+ggplot(data=income.generation, aes(x=generation, y=meanIncome))+
+  geom_col()+scale_x_discrete(limits=c("old","middle","young"))
+  
 
 #4. 월급~세대 및 성별
-genIncome<-welfare %>% 
+income.generationGender<-welfare %>% 
   filter(!is.na(income)) %>% 
   group_by(generation, gender) %>% 
-  summarise(meanIncome=mean(income))
-genIncome                              
+  summarise(meanIncome=mean(income)); income.generationGender                             
 
-ggplot(data=genIncome, aes(x=generation, y=meanIncome, fill=gender))+
+ggplot(data=income.generationGender, aes(x=generation, y=meanIncome, fill=gender))+
   geom_col()+scale_x_discrete(limits=c("young","middle","old"))
 
-ggplot(data=genIncome, aes(x=generation, y=meanIncome, fill=gender))+
+ggplot(data=income.generationGender, aes(x=generation, y=meanIncome, fill=gender))+
   geom_col(position="dodge")+
   scale_x_discrete(limits=c("young","middle","old"))
 
-ageGenIncome<-welfare %>% 
+income.ageGender<-welfare %>% 
   filter(!is.na(income)) %>% 
   group_by(age, gender) %>% 
-  summarise(meanIncome=mean(income))
-head(ageGenIncome)
+  summarise(meanIncome=mean(income)); head(income.ageGender)
 
-ggplot(data=ageGenIncome, aes(x=age, y=meanIncome, col=gender))+geom_line()
+ggplot(data=income.ageGender, aes(x=age, y=meanIncome, col=gender))+geom_line()
 
 
 #5. 월급~직업
@@ -91,7 +88,7 @@ head(jobs)
 dim(jobs)
 
 welfare<-left_join(welfare, jobs, id="code_job")
-
+head(welfare[,c("code_job", "job")])
 welfare %>% 
   filter(!is.na(code_job)) %>% 
   select(code_job, job) %>% 
@@ -99,19 +96,18 @@ welfare %>%
 
 welfare$income<-ifelse(welfare$income %in% c(0,9999), NA, welfare$income)
 
-jobIncome<-welfare %>% 
+income.job<-welfare %>% 
   filter(!is.na(job) & !is.na(income)) %>% 
   group_by(job) %>% 
-  summarise(meanIncome=mean(income))
-head(jobIncome)
+  summarise(meanIncome=mean(income)); head(income.job)
 
-top10<-jobIncome %>% 
+top10<-income.job %>% 
   arrange(desc(meanIncome)) %>% 
-  head(10)
+  head(10); top10
 ggplot(data=top10, aes(x=reorder(job, meanIncome), y=meanIncome))+
   geom_col()+coord_flip()
 
-bottom10<-jobIncome %>% 
+bottom10<-income.job %>% 
   arrange(meanIncome) %>% 
   head(10)
 ggplot(data=bottom10, aes(x=reorder(job, -meanIncome), y=meanIncome))+
