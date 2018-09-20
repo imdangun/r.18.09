@@ -3,7 +3,7 @@
 library(dplyr)
 exam<-read.csv("csv_exam.csv"); exam
 
-exam %>% filter(class==1)
+exam %>% filter(class==1) #pipe operator
 exam %>% filter(class==2)
 exam %>% filter(class!=1)
 exam %>% filter(class!=3)
@@ -15,7 +15,7 @@ exam %>% filter(english<=80)
 exam %>% filter(class==1 & math>=50)
 exam %>% filter(class==2 & english>=80)
 exam %>% filter(math>=90 | english>=90)
-exam %>% filter(english<90  | science<50)
+exam %>% filter(english<90 | science<50)
 exam %>% filter(class==1 | class==3 | class==5)
 exam %>% filter(class %in% c(1,3,5))
 
@@ -26,9 +26,10 @@ mean(class2$math)
 
 #과제1:
 #mpg 데이터를 이용한다.
-#1) 배기량이 4이하인 차와 5이상인 차 중에서 고속도로 평균 연비를 비교한다.
-#2) 'audi'와 'toyota'중 어느 제조사의 도시평균연비가 높은 지 본다.
-#3) 'chevrolet','ford','honda' 차들을 총해서 고속도로평균연비를 본다. 
+#1) 배기량이 4이하인 차고속도로 평균 연비, 5이상인 차의 고속도로 평균 연비를 출력한다.
+#2) 배기량이 4이하인 차와, 5이상인 차 모두의 고속도로 평균 연비를 출력한다.
+#3) 'audi'와 'toyota'중 어느 제조사의 도시평균연비가 높은 지 본다.
+#4) 'chevrolet','ford','honda' 차들을 총해서 고속도로평균연비를 본다. 
 
 
 #2. select variable
@@ -40,7 +41,6 @@ exam %>% select(-math, -english)
 
 exam %>% filter(class==1) %>% select(english)
 exam %>% select(id, math) %>% head(3)
-exam %>% select(id, math) %>% head
 
 #과제2:
 #1) mpg 데이터에서 class(자동차종류), cty(도시연비) 변수로 구성된 데이터를 만든다.
@@ -67,7 +67,7 @@ exam %>% mutate(total=math+english+science) %>% arrange(total) %>% head
 #1) mpg 데이터 복사본을 만들고, cty와 hwy를 더한 '합산 연비' 변수를 추가한다.
 #2) '합산 연비' 변수를 2로 나눈 '평균 연비' 변수를 추가한다.
 #3) '평균 연비' 값이 높은 순으로 자동차 3대를 출력한다.
-#4) dplyr 패키지를 이용해, 1~3번 문제를 해결한다.
+#4) 1~3번 문제를 명령문 하나로 해결한다. 
 
 
 #5. summarise
@@ -82,11 +82,11 @@ mpg %>% group_by(manufacturer, drv) %>%
   head(10)
 
 mpg %>%
-  group_by(manufacturer) %>% 
   filter(class=="suv") %>% 
-  mutate(avg=(cty+hwy)/2) %>% 
-  summarise(meanFuel=mean(avg)) %>% 
-  arrange(desc(meanFuel)) %>% 
+  mutate(avg=(cty+hwy)/2) %>%
+  group_by(manufacturer) %>% 
+  summarise(fuel.eco=mean(avg)) %>% 
+  arrange(desc(fuel.eco)) %>% 
   head(5)
 
 #과제5:
@@ -103,20 +103,20 @@ test2<-data.frame(id=c(1,2,3,4,5),
                   final=c(70,83,65,95,80))
 test<-left_join(test1, test2, by="id"); test
 
-exam<-read.csv("csv_exam.csv")
+exam<-read.csv("csv_exam.csv"); exam
 name<-data.frame(class=c(1,2,3,4,5),
-                 teacher=c("kim","lee","park","choi","jung"))
-exam<-left_join(exam, name, by="class")
+                 teacher=c("kim","lee","park","choi","jung")); name
+exam<-left_join(exam, name, by="class"); exam
 
 groupA<-data.frame(id=c(1,2,3,4,5),
                    test=c(60,80,70,90,85))
 groupB<-data.frame(id=c(6,7,8,9,10),
                    test=c(70,83,65,95,80))
-groupAll<-bind_rows(groupA, groupB)
-groupAll
+groupAll<-bind_rows(groupA, groupB); groupAll
+
 
 #과제6:
-# f1 연료종류 가격(USD/gallon)
+# f1 flName   price
 # c  CNG      2.35
 # d  diesel   2.38
 # e  ethanol  2.11
@@ -125,24 +125,29 @@ groupAll
 #
 #1) 위 표로 구성된 data.frame 'fuel'을 만든다.
 #2) 'fuel' 데이터를 mpg 데이터에 left_join 한다.
-#3) mpg 에서, model, fl, price 변수만으로, 5개행을 조회한다.
+#3) mpg 에서, model, flName, price 변수만으로, 5개행을 조회한다.
 #------------
 
 
 #과제1:
 #mpg 데이터를 이용한다.
 mpg<-ggplot2::mpg
-#1) 배기량이 4이하인 차와 5이상인 차 중에서 고속도로 평균 연비를 비교한다.
+#1) 배기량이 4이하인 차고속도로 평균 연비, 5이상인 차의 고속도로 평균 연비를 출력한다.
 displ4<-mpg %>% filter(displ<=4)
 displ5<-mpg %>% filter(displ>=5)
 mean(displ4$hwy); mean(displ5$hwy)
 
-#2) 'audi'와 'toyota'중 어느 제조사의 도시평균연비가 높은 지 본다.
+#2) 배기량이 4이하인 차와, 5이상인 차 모두의 고속도로 평균 연비를 출력한다.
+mean(
+  (mpg %>% filter(displ<=4 | displ>=5))$hwy
+)
+
+#3) 'audi'와 'toyota'중 어느 제조사의 도시평균연비가 높은 지 본다.
 audi<-mpg %>% filter(manufacturer=='audi')
 toyota<-mpg %>% filter(manufacturer=='toyota')
 mean(audi$cty); mean(toyota$cty)
 
-#3) 'chevrolet','ford','honda' 차들을 총해서 고속도로평균연비를 본다. 
+#4) 'chevrolet','ford','honda' 차들을 총해서 고속도로평균연비를 본다. 
 car<-mpg %>% filter(manufacturer %in% c('chevrolet','ford','honda'))
 mean(car$hwy)
 
@@ -151,7 +156,7 @@ mean(car$hwy)
 #1) mpg 데이터에서 class(자동차종류), cty(도시연비) 변수로 구성된 데이터를 만든다.
 mpg<- ggplot2::mpg %>% select(class,cty)
 #2) 'suv','compact' 자동차의 도시연비를 비교한다.
-suv<-mpg %>% filter(class=='suv'); mean(suv$cty)
+mean((mpg %>% filter(class=='suv'))$cty)
 compact<-mpg %>% filter(class=='compact'); mean(compact$cty)
 
 
@@ -169,8 +174,8 @@ mpg<-mpg %>% mutate(total=cty+hwy)
 mpg<-mpg %>% mutate(avg=total/2)
 #3) '평균 연비' 값이 높은 순으로 자동차 3대를 출력한다.
 mpg %>% arrange(desc(avg)) %>% head(3)
-#4) dplyr 패키지를 이용해, 1~3번 문제를 해결한다. 
-mpg %>% mutate(total=cty+hwy,avg=total/2) %>% arrange(desc(avg)) %>% head
+#4) 1~3번 문제를 명령문 하나로 해결한다. 
+mpg %>% mutate(total=cty+hwy,avg=total/2) %>% arrange(desc(avg)) %>% head(3)
 
 
 #과제5:
@@ -199,7 +204,7 @@ mpg %>%
 
 
 #과제6:
-# f1 연료종류 가격(USD/gallon)
+# f1 flName   price
 # c  CNG      2.35
 # d  diesel   2.38
 # e  ethanol  2.11
@@ -214,5 +219,5 @@ fuel<-data.frame(fl=c("c","d","e","p","r"),
 #2) 'fuel' 데이터를 mpg 데이터에 left_join 한다.
 mpg<-ggplot2::mpg
 mpg<-left_join(mpg, fuel)
-#3) mpg 에서, model, fl, price 변수만으로, 5개행을 조회한다.
-mpg %>% select(model, fl, price) %>% head(5)
+#3) mpg 에서, model, flName, price 변수만으로, 5개행을 조회한다.
+mpg %>% select(model, flName, price) %>% head(5)

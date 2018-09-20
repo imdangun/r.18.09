@@ -52,18 +52,17 @@ table(mpg$test)
 library(ggplot2)
 qplot(mpg$test)
 
-mpg$grade<-ifelse(mpg$gasMileage>=30,"A",
-                  ifelse(mpg$gasMileage>=20,"B","C"))
+mpg$grade<-ifelse(mpg$mean>=30,"A",ifelse(mpg$mean>=20,"B","C"))
 head(mpg$grade,20)
 table(mpg$grade)
 qplot(mpg$grade)
 
 
 #과제2:
-#1) ggplot2::midwest 데이터를 data.frame 으로 불러와서, 구조를 파악한다.
+#1) ggplot2::midwest 데이터를 불러와서, 구조를 파악한다.
 #2) poptotal을 total로, popasian을 asisan으로 변수명을 변경한다.
 #3) total, asian을 이용해, '전체 인구 대비 아시아 인구율' 변수를 만든다. 
-#   히스토그램으로 도시 분포를 살펴본다.
+#   히스토그램으로 '전체 인구 대비 아시아 인구율'을 그린다.
 #4) 아시아 인구율 전체 평균을 구한다. 
 #   평균 초과는 'large', 평균 이하는 'small' 값을 가지는 변수를 만든다.
 #5) 'large''small'에 해당하는 지역의 빈도표, 빈도 막대 그래프를 만든다.
@@ -80,13 +79,12 @@ head(mpg)
 
 
 #과제2:
-#1) ggplot2::midwest 데이터를 data.frame 으로 불러와서, 구조를 파악한다.
-midwest<-as.data.frame(ggplot2::midwest)
+#1) ggplot2::midwest 데이터를불러와서, 구조를 파악한다.
+midwest<-ggplot2::midwest
 #2) poptotal을 total로, popasian을 asian으로 변수명을 변경한다.
-library(dplyr)
 midwest<-rename(midwest, total=poptotal, asian=popasian)
 #3) total, asian을 이용해, '전체 인구 대비 아시아 인구 백분율' 변수를 만든다. 
-#   히스토그램으로 도시 분포를 살펴본다.
+#   히스토그램으로 '전체 인구 대비 아시아 인구율'을 그린다.
 midwest$asianPct<-midwest$asian/midwest$total*100
 head(midwest$asianPct)
 hist(midwest$asianPct)
@@ -97,6 +95,4 @@ midwest$vol<-ifelse(midwest$asianPct>asianMean, "large", "small")
 head(midwest$vol)
 #5) 'large''small'에 해당하는 지역의 빈도표, 빈도 막대 그래프를 만든다.
 table(midwest$vol)
-hist(midwest$vol)
-library(ggplot2)
 qplot(midwest$vol)
