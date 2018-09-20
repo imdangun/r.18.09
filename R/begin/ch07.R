@@ -12,11 +12,10 @@ ggplot(data=mpg, aes(x=displ, y=hwy))+geom_point()+xlim(3,6)+ylim(10,30)
 
 
 #2. bar chart
-library(dplyr)
-mpg2<-mpg %>% group_by(drv) %>% summarise(meanHwy=mean(hwy))
+mpg2<-mpg %>% group_by(drv) %>% summarise(meanHwy=mean(hwy)); mpg2
 ggplot(data=mpg2, aes(x=drv, y=meanHwy))+geom_col()
 ggplot(data=mpg2, aes(x=reorder(drv, -meanHwy), y=meanHwy))+geom_col()
-
+ggplot(data=mpg, aes(x=drv))+geom_col() #error
 ggplot(data=mpg, aes(x=drv))+geom_bar()
 
 #과제2:
