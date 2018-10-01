@@ -120,16 +120,14 @@ jobMale<-welfare %>%
   group_by(job) %>% 
   summarise(cnt=n()) %>% 
   arrange(desc(cnt)) %>% 
-  head(10)
-jobMale
+  head(10); jobMale
 
 jobFemale<-welfare %>% 
   filter(!is.na(job) & gender=="female") %>% 
   group_by(job) %>% 
   summarise(cnt=n()) %>% 
   arrange(desc(cnt)) %>% 
-  head(10)
-jobFemale
+  head(10); jobFemale
 
 ggplot(data=jobMale, aes(x=reorder(job,cnt), y=cnt))+
   geom_col()+coord_flip()
@@ -152,45 +150,43 @@ table(welfare$marriage)
 table(is.na(welfare$marriage))                          
 qplot(welfare$marriage)
 
-relMarriage<-welfare %>% 
+marriage.religion<-welfare %>% 
   filter(!is.na(marriage)) %>% 
   count(religion, marriage) %>% 
   group_by(religion) %>% 
-  mutate(pct=round(n/sum(n)*100, 1))
-relMarriage
+  mutate(pct=round(n/sum(n)*100, 1)); marriage.religion
 
-divorce<-relMarriage %>% 
-  filter(marriage=="divorce") %>% 
-  select(religion, pct)
-divorce
+divorce<-marriage.religion %>% 
+  filter(religion.marriage=="divorce") %>% 
+  select(religion, pct); divorce
+  
 ggplot(data=divorce, aes(x=religion, y=pct))+geom_col()
 
 
 #8. 이혼~세대 및 종교
-genMarriage<-welfare %>% 
+marriage.generation<-welfare %>% 
   filter(!is.na(marriage)) %>% 
   count(generation, marriage) %>% 
   group_by(generation) %>% 
-  mutate(pct=round(n/sum(n)*100, 1))
-genMarriage
+  mutate(pct=round(n/sum(n)*100, 1)); marriage.generation
 
-genMarriage<-genMarriage %>% 
+divorce.generation<-marriage.generation %>% 
   filter(generation!="young" & marriage=="divorce") %>% 
-  select(generation, pct)
-genMarriage  
-ggplot(data=genMarriage, aes(x=generation, y=pct))+geom_col()
+  select(generation, pct); divorce.generation
+   
+ggplot(data=divorce.generation, aes(x=generation, y=pct))+geom_col()
 
-genRelMarriage<-welfare %>% 
+marriage.generationMarriage<-welfare %>% 
   filter(!is.na(marriage) & generation!="young") %>% 
   count(generation, religion, marriage) %>% 
   group_by(generation, religion) %>% 
-  mutate(pct=round(n/sum(n)*100, 1))
+  mutate(pct=round(n/sum(n)*100, 1)); marriage.generationMarriage
 
-divorce<-genRelMarriage %>% 
+divorce.generationReligion<- marriage.generationMarriage %>% 
   filter(marriage=="divorce") %>% 
-  select(generation, religion, pct)
-divorce
-ggplot(data=divorce, aes(x=generation, y=pct, fill=religion))+
+  select(generation, religion, pct); divorce.generationReligion
+
+ggplot(data=divorce.generationReligion, aes(x=generation, y=pct, fill=religion))+
   geom_col(position="dodge")
 
 
@@ -198,34 +194,33 @@ ggplot(data=divorce, aes(x=generation, y=pct, fill=religion))+
 class(welfare$code_region)
 table(welfare$code_region)
 regions<-data.frame(code_region=c(1:7),
-                    region=c("서울","경기/인천","부산/경남/울산","대구/경북",
-                             "대전/충남","강원/충북","광주/전남/전북/제주도"))
-regions
+              region=c("서울","경기/인천","부산/경남/울산","대구/경북",
+                       "대전/충남","강원/충북","광주/전남/전북/제주도")); regions
+
 welfare<-left_join(welfare, regions, id="code_region")
 welfare %>% select(code_region, region) %>% head
 
-regGeneration<-welfare %>% 
+generation.region<-welfare %>% 
   count(region, generation) %>% 
   group_by(region) %>% 
-  mutate(pct=round(n/sum(n)*100, 2))
-head(regGeneration)
+  mutate(pct=round(n/sum(n)*100, 1)); generation.region
 
-ggplot(data=regGeneration, aes(x=region, y=pct, fill=generation))+
+ggplot(data=generation.region, aes(x=region, y=pct, fill=generation))+
   geom_col()+coord_flip()
 
 #노년층 비율 오름차순 정렬
-order<-regGeneration %>% 
+order<-generation.region %>% 
   filter(generation=="old") %>% 
   arrange(pct)
 order<-order$region
-ggplot(data=regGeneration, aes(x=region, y=pct, fill=generation))+
+ggplot(data=generation.region, aes(x=region, y=pct, fill=generation))+
   geom_col()+coord_flip()+scale_x_discrete(limits=order)
 
 #세대 순으로 막대 색깔 배치
-class(regGeneration$generation)
-levels(regGeneration$generation)
-regGeneration$generation<-factor(regGeneration$generation, level=c("old","middle","young"))
-class(regGeneration$generation)
-levels(regGeneration$generation)
-ggplot(data=regGeneration, aes(x=region, y=pct, fill=generation))+
+class(generation.region$generation)
+levels(generation.region$generation)
+generation.region$generation<-factor(generation.region$generation, level=c("old","middle","young"))
+class(generation.region$generation)
+levels(generation.region$generation)
+ggplot(data=generation.region, aes(x=region, y=pct, fill=generation))+
   geom_col()+coord_flip()+scale_x_discrete(limits=order)
