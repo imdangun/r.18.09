@@ -16,18 +16,16 @@ txt<-readLines("hiphop.txt")
 head(txt)
 txt<-str_replace_all(txt, "\\W", " ") #W는 대문자이다.
 head(txt)
-nouns<-extractNoun(txt); #extractNoun(): list로 return
+nouns<-extractNoun(txt) #extractNoun(): list로 return
 wordCnt<-table(unlist(nouns)) #unlist(): vector로 return, #table(): table로 return.
 words<-as.data.frame(wordCnt, stringsAsFactors=F)
 head(words)
 words<-rename(words, word=Var1, freq=Freq)
 words<-filter(words, nchar(word)>=2)
 
-top20<-words %>% arrange(desc(freq)) %>% head(20)
-top20
+top20<-words %>% arrange(desc(freq)) %>% head(20); top20
 
-pal<-brewer.pal(8,"Dark2")
-pal
+pal<-brewer.pal(8,"Dark2"); pal
 wordcloud(words=words$word,
           freq=words$freq,
           min.freq=2,
@@ -48,8 +46,7 @@ wordCnt<-table(unlist(nouns))
 words<-as.data.frame(wordCnt, stringsAsFactors=F)
 words<-rename(words, word=Var1, freq=Freq)
 words<-filter(words, nchar(word)>=2)
-top20<-words %>% arrange(desc(freq)) %>% head(20)
-top20
+top20<-words %>% arrange(desc(freq)) %>% head(20); top20
 
 order<-arrange(top20, freq)$word
 ggplot(data=top20, aes(x=word, y=freq))+
