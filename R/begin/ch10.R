@@ -10,10 +10,8 @@ library(mapproj)
 #1. 강력범죄율~미국주
 str(USArrests)
 head(USArrests)
-crime<-rownames_to_column(USArrests, var="state")
-head(crime)
-crime$state<-tolower(crime$state)
-head(crime)
+crime<-rownames_to_column(USArrests, var="state"); head(crime)
+crime$state<-tolower(crime$state); head(crime)
 str(crime)
 
 states<-map_data("state")
@@ -25,11 +23,13 @@ ggChoropleth(data=crime,
 
 
 #2. 인구~대한민국 시도별
-install.packages("stringi")
+install.packages("stringi") # 설치 후 rStudio를 restart.
 install.packages("devtools")
 devtools::install_github("cardiomoon/kormaps2014") #In R CMD INSTALL
 library(kormaps2014)
 library(dplyr)
+library(ggiraphExtra)
+library(ggplot2)
 
 str(korpop1)
 str(changeCode(korpop1)) #changeCode(): utf-8->cp949
